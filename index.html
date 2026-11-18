@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoBrand Studio — Voice & Brand Memory Studio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z'></path><path d='M19 10v2a7 7 0 0 1-14 0v-2'></path><line x1='12' x2='12' y1='19' y2='22'></line></svg>">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F0F9FF',
+              100: '#E0F2FE',
+              200: '#BAE6FD',
+              300: '#7DD3FC',
+              400: '#38BDF8',
+              500: '#0EA5E9',
+              600: '#0284C7',
+              700: '#0369A1',
+            },
+            mint: {
+              50: '#F0FDF4',
+              100: '#DCFCE7',
+              200: '#BBF7D0',
+              300: '#86EFAC',
+              400: '#4ADE80',
+              500: '#22C55E',
+              600: '#16A34A',
+            },
+            coral: {
+              50: '#FFF1F2',
+              100: '#FFE4E6',
+              200: '#FECDD3',
+              400: '#FB7185',
+              500: '#F43F5E',
+              600: '#E11D48',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            serif: ['Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          boxShadow: {
+            'lux': '0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03)',
+            'lux-card': '0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 1px 1px rgba(226, 232, 240, 0.8)',
+            'glow-sky': '0 0 35px -5px rgba(56, 189, 248, 0.35)',
+            'glow-mint': '0 0 35px -5px rgba(34, 197, 94, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Confetti -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #F8FAFC;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.6) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(220, 252, 231, 0.5) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 241, 242, 0.4) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    @keyframes luxuryPulse {
+      0%, 100% { height: 8px; transform: scaleY(0.6); }
+      50% { height: 32px; transform: scaleY(1.1); }
+    }
+    .wave-bar {
+      animation: luxuryPulse 1.2s ease-in-out infinite;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #E2E8F0;
+      height: 6px;
+      border-radius: 9999px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #0284C7;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: #0369A1;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-brand-500 selection:text-white pb-20">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center space-x-3 group">
+        <div class="relative">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500 via-brand-600 to-teal-400 flex items-center justify-center shadow-lg shadow-sky-500/25 group-hover:scale-105 transition duration-300">
+            <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white"></span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-extrabold tracking-tight text-slate-900">
+              EchoBrand<span class="text-brand-600">.</span>
+            </span>
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">
+              Studio
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-600 font-medium hidden sm:block">Voice-First Content with Brand Memory</p>
+        </div>
+      </a>
+
+      <!-- Clean Section Links -->
+      <nav class="hidden lg:flex items-center space-x-1 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80">
+        <a href="#section-vault" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-white transition shadow-sm">
+          Brand Memory
+        </a>
+        <a href="#section-studio" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-white transition shadow-sm">
+          Voice Studio
+        </a>
+        <a href="#section-copilot" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-emerald-700 hover:text-emerald-900 hover:bg-white transition shadow-sm flex items-center gap-1">
+          <i data-lucide="bot" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>AI Text Improver</span>
+        </a>
+        <a href="#section-channels" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-white transition shadow-sm">
+          Multi-Channel
+        </a>
+        <a href="#section-visuals" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-purple-700 hover:text-purple-900 hover:bg-white transition shadow-sm flex items-center gap-1">
+          <i data-lucide="palette" class="w-3.5 h-3.5 text-purple-600"></i>
+          <span>Canva Studio</span>
+        </a>
+        <a href="#section-radar" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-white transition shadow-sm">
+          Slop Radar
+        </a>
+      </nav>
+
+      <!-- Badges & Action -->
+      <div class="flex items-center space-x-2.5">
+        <button id="openAiModalBtn" class="flex items-center space-x-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/90 px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-800 transition shadow-sm">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span id="aiStatusLabel">AI: Active & Ready</span>
+        </button>
+
+        <button id="openKitBtn" class="flex items-center space-x-2 bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-700 hover:to-sky-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition duration-200 shadow-lux active:scale-95">
+          <i data-lucide="award" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Submission Kit</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section id="hero" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center space-y-4">
+    <div class="inline-flex items-center space-x-2 bg-white border border-slate-200/90 shadow-sm px-4 py-1.5 rounded-full text-xs font-semibold text-slate-700">
+      <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+      <span>Product Space AI Hackathon</span>
+      <span class="text-slate-300">•</span>
+      <span class="text-brand-600 font-bold">Track 01: Media & Brand Memory</span>
+    </div>
+
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 max-w-3xl mx-auto leading-tight">
+      Speak in any language. <br/>
+      <span class="bg-gradient-to-r from-brand-600 via-sky-500 to-emerald-600 bg-clip-text text-transparent">
+        Let AI fix grammar, polish thoughts & design cards.
+      </span>
+    </h1>
+
+    <p class="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+      Pair raw <strong class="text-slate-900 font-bold">Wispr Flow</strong> dictation with persistent <strong class="text-slate-900 font-bold">Brand Memory</strong>. Use our new interactive <strong class="text-emerald-700 font-bold">AI Text Improver</strong> to fix weak English or grammar, and generate ready-to-post <strong class="text-purple-700 font-bold">Canva-style PNG graphics</strong>.
+    </p>
+
+    <!-- Visual Stepper Bar -->
+    <div class="max-w-4xl mx-auto pt-3">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+        <div class="bg-white/90 border border-slate-200 p-3.5 rounded-2xl shadow-sm flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 font-bold text-xs flex items-center justify-center border border-brand-200 flex-shrink-0">
+            01
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-900">Brand Memory</p>
+            <p class="text-[10px] text-slate-500">Tone DNA & Slop Shield</p>
+          </div>
+        </div>
+        <div class="bg-white/90 border border-slate-200 p-3.5 rounded-2xl shadow-sm flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 font-bold text-xs flex items-center justify-center border border-emerald-200 flex-shrink-0">
+            02
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-900">Voice & AI Improver</p>
+            <p class="text-[10px] text-slate-500">Fix Grammar & Polish</p>
+          </div>
+        </div>
+        <div class="bg-white/90 border border-slate-200 p-3.5 rounded-2xl shadow-sm flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 font-bold text-xs flex items-center justify-center border border-sky-200 flex-shrink-0">
+            03
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-900">4-Channel Hub</p>
+            <p class="text-[10px] text-slate-500">LinkedIn, X, Email</p>
+          </div>
+        </div>
+        <div class="bg-white/90 border border-slate-200 p-3.5 rounded-2xl shadow-sm flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 font-bold text-xs flex items-center justify-center border border-purple-200 flex-shrink-0">
+            04
+          </div>
+          <div>
+            <p class="text-xs font-bold text-slate-900">Canva Studio</p>
+            <p class="text-[10px] text-slate-500">Custom PNG Designer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1: BRAND MEMORY VAULT              -->
+  <!-- ========================================== -->
+  <section id="section-vault" class="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 shadow-sm">
+            <i data-lucide="sliders" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 1: Brand Memory Vault</h2>
+              <span class="text-[10px] font-bold font-mono bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-full border border-brand-200">
+                Persistent Moat
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Locks in your voice, rules, and negative filters across sessions.</p>
+          </div>
+        </div>
+        <span class="text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
+          Zero-Shot Context
+        </span>
+      </div>
+
+      <!-- Persona Cards Grid -->
+      <div>
+        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-3">
+          Select Active Brand Persona
+        </label>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5" id="personaList">
+        </div>
+      </div>
+
+      <!-- Sliders & Anti-Slop (2 Columns) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+        
+        <!-- Tone DNA Sliders -->
+        <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-200/60 pb-3">
+            <span class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-brand-600"></i>
+              Tone DNA Sliders
+            </span>
+            <span class="text-[11px] font-semibold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md border border-brand-200">
+              Auto-calibrated
+            </span>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-500 font-medium">Conversational</span>
+              <span id="toneLabel" class="font-bold text-brand-600 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-sm text-xs">Punchy & Candid</span>
+              <span class="text-slate-500 font-medium">Corporate</span>
+            </div>
+            <input type="range" id="sliderTone" min="1" max="5" value="2" class="w-full">
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-500 font-medium">1-Line Punchy</span>
+              <span id="cadenceLabel" class="font-bold text-emerald-600 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-sm text-xs">High-Whitespace</span>
+              <span class="text-slate-500 font-medium">Long Narrative</span>
+            </div>
+            <input type="range" id="sliderCadence" min="1" max="5" value="1" class="w-full">
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-500 font-medium">Consensus</span>
+              <span id="stanceLabel" class="font-bold text-coral-600 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shadow-sm text-xs">Bold Contrarian</span>
+              <span class="text-slate-500 font-medium">Disruptive</span>
+            </div>
+            <input type="range" id="sliderStance" min="1" max="5" value="5" class="w-full">
+          </div>
+        </div>
+
+        <!-- Anti-Slop Shield -->
+        <div class="bg-coral-50/50 border border-coral-200/80 rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-coral-200/60 pb-3">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-coral-600"></i>
+              <span class="text-xs font-bold text-coral-900 uppercase tracking-wider">
+                Anti-Slop Shield (Banned Clichés)
+              </span>
+            </div>
+            <span id="bannedCount" class="text-[11px] font-bold font-mono text-coral-700 bg-coral-100 px-2 py-0.5 rounded-md border border-coral-200">
+              10 clichés blocked
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 leading-relaxed">
+            These generic phrases trigger reader fatigue. EchoBrand sanitizes them automatically:
+          </p>
+
+          <div id="bannedWordsContainer" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1">
+          </div>
+
+          <div class="flex items-center space-x-2 pt-1">
+            <input type="text" id="addBannedInput" placeholder="Add custom cliché (press Enter)..." class="flex-1 bg-white border border-coral-300 rounded-xl px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-coral-400">
+            <button id="addBannedBtn" class="bg-coral-600 hover:bg-coral-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-sm">
+              Add
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rules List -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-4.5 space-y-2.5">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-800">
+          <span class="flex items-center space-x-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+            <span>Active Brand Formatting Rules</span>
+          </span>
+          <span class="text-[11px] text-slate-500 font-medium">Applied to every generation</span>
+        </div>
+        <ul id="rulesList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 2: VOICE STUDIO & LIVE SLOP HEATMAP   -->
+  <!-- ============================================== -->
+  <section id="section-studio" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <!-- Studio Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-sm">
+            <i data-lucide="mic" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 2: Voice & Dictation Studio</h2>
+              <span class="text-[10px] font-bold font-mono bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                Wispr Flow 200 WPM
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Dictate in your natural voice. Don't worry about grammar or mistakes—our AI will fix it below!</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-500 font-semibold">Load Demo:</span>
+          <button id="loadDemo1" class="text-xs font-semibold px-3 py-1.5 rounded-xl border border-brand-200 bg-brand-50 text-brand-700 hover:bg-brand-100 transition shadow-sm">
+            🎙️ Hackathon Launch
+          </button>
+          <button id="loadDemo2" class="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition shadow-sm">
+            💡 Anti-Slop Rant
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Slop Heatmap Banner -->
+      <div id="slopHeatmapAlert" class="hidden bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-amber-900">Slop Scanner Detected Clichés!</p>
+            <p id="slopDetectedList" class="text-[11px] text-amber-700 mt-0.5">Found: "delve", "game-changer"</p>
+          </div>
+        </div>
+        <button id="cleanSlopBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-sm transition active:scale-95 flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>1-Click Human Rewrite</span>
+        </button>
+      </div>
+
+      <!-- Dictation Canvas Box -->
+      <div class="relative">
+        <textarea id="rawInput" rows="7" placeholder="Speak at 200 WPM using Wispr Flow or click 'Dictate with Live Mic', or paste raw notes. Speak freely even if your English has mistakes..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-5 text-sm sm:text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 resize-none leading-relaxed transition font-sans"></textarea>
+
+        <div id="recordingBadge" class="hidden absolute top-4 right-4 flex items-center space-x-2.5 bg-rose-600 text-white px-3.5 py-1.5 rounded-full shadow-lg">
+          <span class="w-2.5 h-2.5 bg-white rounded-full animate-ping"></span>
+          <span id="recordingTimer" class="text-xs font-mono font-bold">00:00</span>
+          <div class="flex items-center space-x-0.5 ml-1">
+            <span class="w-1 h-3 bg-white rounded-full wave-bar"></span>
+            <span class="w-1 h-5 bg-white rounded-full wave-bar" style="animation-delay: 0.2s"></span>
+            <span class="w-1 h-3 bg-white rounded-full wave-bar" style="animation-delay: 0.4s"></span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 mt-2.5 px-1">
+          <div class="flex items-center space-x-3 font-medium">
+            <span><strong id="wordCount" class="text-slate-800 font-bold font-mono">0</strong> words</span>
+            <span>•</span>
+            <span>~<strong id="speakTime" class="text-slate-800 font-bold font-mono">0m</strong> spoken audio</span>
+          </div>
+          <button id="clearInputBtn" class="text-slate-400 hover:text-rose-600 flex items-center space-x-1 font-semibold transition">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            <span>Clear</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <button id="toggleRecordBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2.5 px-5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold transition shadow-sm active:scale-95">
+          <i data-lucide="mic" class="w-4 h-4 text-brand-600"></i>
+          <span id="recordBtnText">Dictate with Live Mic / Wispr</span>
+        </button>
+
+        <div class="flex items-center space-x-2 w-full sm:w-auto">
+          <a href="#section-copilot" class="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-4 py-3 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition shadow-sm">
+            <i data-lucide="wand-2" class="w-4 h-4 text-emerald-600"></i>
+            <span>AI Polish & Grammar</span>
+          </a>
+
+          <button id="generateBtn" class="w-full sm:w-auto flex items-center justify-center space-x-2.5 px-7 py-3 rounded-2xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-brand-600 via-sky-500 to-teal-500 hover:from-brand-700 hover:to-teal-600 text-white shadow-lux-card hover:shadow-glow-sky active:scale-98 transition duration-200">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span id="generateBtnText">Repurpose Across 4 Channels</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================= -->
+  <!-- SECTION 3: AI BRAND COPILOT & GRAMMAR IMPROVER (NEW)    -->
+  <!-- ======================================================= -->
+  <section id="section-copilot" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+    <div class="bg-gradient-to-br from-emerald-50/60 via-white to-sky-50/40 rounded-3xl border border-emerald-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <!-- Copilot Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/25">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 3: AI Brand Copilot & Text Improver</h2>
+              <span class="text-[10px] font-bold font-mono bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                Live Assistant
+              </span>
+            </div>
+            <p class="text-xs text-slate-600">Weak English? Grammar mistakes? Ask AI to fix grammar, polish tone, or generate image ideas!</p>
+          </div>
+        </div>
+
+        <span class="text-xs font-semibold text-emerald-800 bg-white border border-emerald-200 px-3.5 py-1.5 rounded-xl shadow-sm">
+          ✨ Grammar + Tone + Brainstorming
+        </span>
+      </div>
+
+      <!-- Quick AI Action Pills -->
+      <div>
+        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-2.5">
+          1-Click Smart Actions:
+        </label>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <button id="aiActionGrammar" class="ai-pill-btn p-3 bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-2xl text-left transition shadow-sm group">
+            <div class="flex items-center space-x-2 text-emerald-600 font-bold text-xs mb-1">
+              <i data-lucide="check-check" class="w-4 h-4"></i>
+              <span>Fix Grammar & Polish</span>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-tight">Fix spelling, tenses & make English sound 100% native.</p>
+          </button>
+
+          <button id="aiActionHook" class="ai-pill-btn p-3 bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 rounded-2xl text-left transition shadow-sm group">
+            <div class="flex items-center space-x-2 text-brand-600 font-bold text-xs mb-1">
+              <i data-lucide="flame" class="w-4 h-4"></i>
+              <span>Viral Hook Booster</span>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-tight">Turns boring openings into thumb-stopping hooks.</p>
+          </button>
+
+          <button id="aiActionImageIdeas" class="ai-pill-btn p-3 bg-white hover:bg-purple-50 border border-slate-200 hover:border-purple-300 rounded-2xl text-left transition shadow-sm group">
+            <div class="flex items-center space-x-2 text-purple-600 font-bold text-xs mb-1">
+              <i data-lucide="lightbulb" class="w-4 h-4"></i>
+              <span>Image Studio Ideas</span>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-tight">Recommends 3 visual designs to build in Canva Studio.</p>
+          </button>
+
+          <button id="aiActionSimplify" class="ai-pill-btn p-3 bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-300 rounded-2xl text-left transition shadow-sm group">
+            <div class="flex items-center space-x-2 text-amber-600 font-bold text-xs mb-1">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Explain Like I'm 5</span>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-tight">Removes corporate jargon and explains in simple words.</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Custom AI Prompt Box -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center space-x-2 text-xs font-bold text-slate-800">
+          <i data-lucide="message-square-plus" class="w-4 h-4 text-emerald-600"></i>
+          <span>Ask AI Copilot to do anything:</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="customAiPrompt" placeholder="e.g. 'Make it sound more confident', 'Check my spelling', 'Suggest 3 image ideas'..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-400">
+          <button id="runCustomAiBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-sm flex items-center space-x-1.5 active:scale-95 flex-shrink-0">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>Ask AI</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- AI Copilot Result Box (Shows Diff / Response) -->
+      <div id="aiCopilotResultBox" class="hidden bg-white border border-emerald-200 rounded-2xl p-5 space-y-3 shadow-md">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="aiResultTitle" class="text-xs font-bold text-slate-900">AI Improved Version</span>
+          </div>
+          <button id="applyAiResultBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl transition shadow-sm flex items-center space-x-1 active:scale-95">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Apply to Voice Studio</span>
+          </button>
+        </div>
+        <div id="aiResultContent" class="text-xs sm:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-wrap bg-slate-50 p-4 rounded-xl border border-slate-200">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 4: MULTI-CHANNEL OUTPUT HUB           -->
+  <!-- ============================================== -->
+  <section id="section-channels" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <!-- Section Header & Channel Tabs -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600 shadow-sm">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 4: Multi-Channel Studio Previews</h2>
+              <span class="text-[10px] font-bold font-mono bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-200">
+                Synchronized
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Each output adheres to platform algorithms and reading habits.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center p-1 bg-slate-100/80 border border-slate-200 rounded-2xl overflow-x-auto">
+          <button id="tabLinkedin" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition text-white bg-brand-600 shadow-sm">
+            <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
+            <span>LinkedIn Post</span>
+          </button>
+          <button id="tabTwitter" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition text-slate-600 hover:text-slate-900 hover:bg-white/60">
+            <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
+            <span>X (Twitter) Thread</span>
+          </button>
+          <button id="tabCarousel" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition text-slate-600 hover:text-slate-900 hover:bg-white/60">
+            <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
+            <span>Visual Carousel</span>
+          </button>
+          <button id="tabNewsletter" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition text-slate-600 hover:text-slate-900 hover:bg-white/60">
+            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+            <span>Newsletter</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: LinkedIn Preview -->
+      <div id="contentLinkedin" class="channel-view space-y-4">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span class="flex items-center gap-1.5 font-medium">
+            <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+            <span>Mobile-scannable format with 2-line maximum paragraphs</span>
+          </span>
+          <div class="flex items-center space-x-2">
+            <button id="sendToImageStudioBtn" class="flex items-center space-x-1.5 text-xs text-purple-700 hover:text-purple-800 font-bold bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-xl transition active:scale-95 shadow-sm">
+              <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+              <span>Create Visual Card</span>
+            </button>
+            <button id="copyLinkedinBtn" class="flex items-center space-x-1.5 text-xs text-brand-700 hover:text-brand-800 font-bold bg-brand-50 border border-brand-200 px-3.5 py-1.5 rounded-xl transition active:scale-95 shadow-sm">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy Post</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="max-w-2xl mx-auto bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-lux">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-start justify-between">
+            <div class="flex items-center space-x-3.5">
+              <img id="linkedinAvatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80" class="w-12 h-12 rounded-full object-cover ring-2 ring-slate-100 shadow-sm">
+              <div>
+                <p id="linkedinName" class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                  Alex Rivera
+                  <span class="text-slate-400 font-normal text-xs">• 1st</span>
+                </p>
+                <p id="linkedinTagline" class="text-xs text-slate-500 truncate max-w-md">
+                  Building EchoBrand with Wispr Flow for Product Space Hackathon 🚀
+                </p>
+                <p class="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                  1h • Edited • <i data-lucide="globe" class="w-3 h-3 inline text-slate-400"></i>
+                </p>
+              </div>
+            </div>
+            <button class="text-slate-400 hover:text-slate-600">
+              <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <div id="linkedinBody" class="p-5 sm:p-6 text-sm text-slate-800 whitespace-pre-wrap leading-relaxed font-sans">
+99% of AI-generated content sounds like robotic slop.
+
+Here is why "Brand Memory" changes everything (and how we built it in 6 hours):
+
+Today during the @Product Space Hackathon, I stopped typing prompts into ChatGPT.
+
+Instead, I spoke into Wispr Flow for 60 seconds with raw, messy thoughts.
+
+Here is the core breakthrough:
+• Standard AI treats every prompt like day 1 with zero context.
+• EchoBrand Studio holds persistent Brand Memory: your tone DNA, banned buzzwords, past winners, and target audience.
+• One voice stream immediately transforms into LinkedIn posts, Twitter threads, carousel decks, and newsletters.
+
+No "delve". No "game-changer". No corporate jargon.
+
+Just authentic voice at 200 words per minute.
+
+What's your biggest pet peeve with AI-written posts? Drop it below 👇
+          </div>
+
+          <div class="px-5 py-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span class="flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center text-[10px] text-white">👍</span>
+              <span class="w-5 h-5 rounded-full bg-rose-500 flex items-center justify-center text-[10px] text-white -ml-2">❤️</span>
+              <span class="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center text-[10px] text-white -ml-2">👏</span>
+              <span class="ml-1 font-bold text-slate-700">842</span>
+            </span>
+            <span>128 comments • 42 reposts</span>
+          </div>
+
+          <div class="px-5 py-2.5 border-t border-slate-100 flex items-center justify-around text-xs text-slate-600 font-semibold">
+            <button id="likeBtn" class="flex items-center space-x-1.5 py-1.5 px-3 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition">
+              <i data-lucide="thumbs-up" class="w-4 h-4"></i>
+              <span>Like</span>
+            </button>
+            <button class="flex items-center space-x-1.5 py-1.5 px-3 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+              <span>Comment</span>
+            </button>
+            <button class="flex items-center space-x-1.5 py-1.5 px-3 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition">
+              <i data-lucide="repeat-2" class="w-4 h-4"></i>
+              <span>Repost</span>
+            </button>
+            <button class="flex items-center space-x-1.5 py-1.5 px-3 rounded-xl hover:bg-slate-50 hover:text-brand-600 transition">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: X (Twitter) Thread -->
+      <div id="contentTwitter" class="channel-view hidden space-y-4">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span class="flex items-center gap-1.5 font-medium">
+            <i data-lucide="twitter" class="w-4 h-4 text-sky-500"></i>
+            <span>4-Tweet Sequence with Character Counts & Hook Quality</span>
+          </span>
+          <button id="copyTwitterBtn" class="flex items-center space-x-1.5 text-xs text-brand-700 hover:text-brand-800 font-bold bg-brand-50 border border-brand-200 px-3.5 py-1.5 rounded-xl transition active:scale-95 shadow-sm">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Entire Thread</span>
+          </button>
+        </div>
+        <div id="twitterCardsList" class="max-w-2xl mx-auto space-y-3.5">
+        </div>
+      </div>
+
+      <!-- Tab 3: Visual Carousel Deck -->
+      <div id="contentCarousel" class="channel-view hidden space-y-4">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span class="flex items-center gap-1.5 font-medium">
+            <i data-lucide="presentation" class="w-4 h-4 text-purple-600"></i>
+            <span>6-Slide Visual Card Deck Outline (1080x1080)</span>
+          </span>
+          <div class="flex items-center space-x-2">
+            <a href="#section-visuals" class="flex items-center space-x-1.5 text-xs text-purple-700 hover:text-purple-800 font-bold bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-xl transition shadow-sm">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Open in Canva Studio</span>
+            </a>
+            <button id="copyCarouselBtn" class="flex items-center space-x-1.5 text-xs text-purple-700 hover:text-purple-800 font-bold bg-purple-50 border border-purple-200 px-3.5 py-1.5 rounded-xl transition active:scale-95 shadow-sm">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy Deck Outline</span>
+            </button>
+          </div>
+        </div>
+        <div id="carouselGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        </div>
+      </div>
+
+      <!-- Tab 4: Substack / Newsletter -->
+      <div id="contentNewsletter" class="channel-view hidden space-y-4">
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span class="flex items-center gap-1.5 font-medium">
+            <i data-lucide="mail" class="w-4 h-4 text-brand-600"></i>
+            <span>Executive Newsletter & Subject Line A/B Tester</span>
+          </span>
+          <button id="copyNewsletterBtn" class="flex items-center space-x-1.5 text-xs text-brand-700 hover:text-brand-800 font-bold bg-brand-50 border border-brand-200 px-3.5 py-1.5 rounded-xl transition active:scale-95 shadow-sm">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Newsletter</span>
+          </button>
+        </div>
+
+        <div class="max-w-3xl mx-auto bg-slate-50 border border-slate-200/80 rounded-2xl p-6 sm:p-8 space-y-5 shadow-sm">
+          <div class="space-y-2.5 bg-white p-4.5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Top Subject Line</p>
+            <p id="nlSubject" class="text-base font-bold text-slate-900">Why 99% of AI content gets ignored (and our 6-hour hackathon build)</p>
+            <div class="text-xs text-slate-600 space-y-1 pt-1">
+              <p class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">A/B Testing Variants:</p>
+              <p id="nlAlt1" class="text-slate-700">• Brand Memory: The antidote to ChatGPT slop</p>
+              <p id="nlAlt2" class="text-slate-700">• How voice dictation + Brand DNA 10x'd our content engine</p>
+            </div>
+          </div>
+
+          <div class="bg-brand-50 border border-brand-200 p-4.5 rounded-2xl space-y-1">
+            <p class="text-xs font-bold text-brand-800 uppercase tracking-wider">Executive TL;DR</p>
+            <p id="nlTldr" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium"></p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-2 shadow-sm">
+            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Deep Dive Editorial</p>
+            <div id="nlBody" class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-sans"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- SECTION 5: ADVANCED CANVA-STYLE IMAGE STUDIO (UPGRADED) -->
+  <!-- ======================================================== -->
+  <section id="section-visuals" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <!-- Studio Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-500 text-white flex items-center justify-center shadow-md shadow-purple-500/20">
+            <i data-lucide="palette" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 5: Canva-Style Visual Image Studio</h2>
+              <span class="text-[10px] font-bold font-mono bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-200">
+                Advanced Designer
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Customize templates, typography, aspect ratios, and export high-res PNG cards for your post.</p>
+          </div>
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="flex items-center space-x-2">
+          <button id="downloadImageBtn" class="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition duration-200 shadow-md shadow-purple-500/25 active:scale-95">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Download PNG Card</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Studio Work Area (Canva-like multi-tab layout) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Canva Controls Panel (5 cols) -->
+        <div class="lg:col-span-5 space-y-4 bg-slate-50/80 p-5 rounded-2xl border border-slate-200">
+          
+          <!-- Tab Navigation for Controls -->
+          <div class="flex items-center p-1 bg-white border border-slate-200 rounded-xl space-x-1">
+            <button id="canvaTabDesign" class="canva-tab flex-1 py-1.5 text-xs font-bold rounded-lg bg-purple-600 text-white transition">
+              Layout & Text
+            </button>
+            <button id="canvaTabTheme" class="canva-tab flex-1 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+              Style & Colors
+            </button>
+            <button id="canvaTabBadges" class="canva-tab flex-1 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition">
+              Badges & Bio
+            </button>
+          </div>
+
+          <!-- Tab Content 1: Layout & Text -->
+          <div id="canvaPanelDesign" class="space-y-4">
+            <!-- Aspect Ratio Switcher -->
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+                Canvas Format
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button class="ratio-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-purple-500 ring-2 ring-purple-500/20 text-purple-700" data-ratio="1:1">
+                  1:1 Square (Feed)
+                </button>
+                <button class="ratio-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-slate-200 text-slate-600 hover:border-slate-300" data-ratio="16:9">
+                  16:9 Landscape (X)
+                </button>
+                <button class="ratio-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-slate-200 text-slate-600 hover:border-slate-300" data-ratio="4:5">
+                  4:5 Portrait (IG)
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide Sync -->
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+                Sync from Carousel Slide
+              </label>
+              <div class="grid grid-cols-6 gap-1" id="slideSyncButtons">
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-purple-600 text-white border-purple-600" data-slide="1">1</button>
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-slide="2">2</button>
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-slide="3">3</button>
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-slide="4">4</button>
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-slide="5">5</button>
+                <button class="slide-sync-btn py-1.5 rounded-lg border text-xs font-bold transition bg-white text-slate-700 border-slate-200 hover:bg-slate-100" data-slide="6">6</button>
+              </div>
+            </div>
+
+            <!-- Text Fields -->
+            <div class="space-y-2.5">
+              <div>
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1">
+                  Card Headline
+                </label>
+                <input type="text" id="imgHeadlineInput" value="The Death of AI Slop: Why Brand Memory is the Moat" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-400">
+              </div>
+
+              <div>
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1">
+                  Card Body / Subtext
+                </label>
+                <textarea id="imgBodyInput" rows="3" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none">99% of AI posts sound like robotic encyclopedia entries. Here is the 60-second voice framework we used instead.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Content 2: Style & Colors -->
+          <div id="canvaPanelTheme" class="hidden space-y-4">
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-2">
+                Luxury Color Themes
+              </label>
+              <div class="grid grid-cols-2 gap-2" id="themePicker">
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-purple-500 ring-2 ring-purple-500/20" data-theme="ivory">
+                  <span class="w-4 h-4 rounded-full bg-slate-100 border border-slate-300"></span>
+                  <span>Ivory Clean</span>
+                </button>
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-slate-200 hover:border-slate-300" data-theme="sky">
+                  <span class="w-4 h-4 rounded-full bg-gradient-to-r from-sky-400 to-brand-600"></span>
+                  <span>Sky Horizon</span>
+                </button>
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-slate-200 hover:border-slate-300" data-theme="emerald">
+                  <span class="w-4 h-4 rounded-full bg-gradient-to-r from-emerald-400 to-teal-600"></span>
+                  <span>Emerald Tech</span>
+                </button>
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-slate-200 hover:border-slate-300" data-theme="obsidian">
+                  <span class="w-4 h-4 rounded-full bg-slate-900 border border-slate-700"></span>
+                  <span>Obsidian Dark</span>
+                </button>
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-slate-200 hover:border-slate-300" data-theme="sunset">
+                  <span class="w-4 h-4 rounded-full bg-gradient-to-r from-rose-500 to-amber-400"></span>
+                  <span>Sunset Coral</span>
+                </button>
+                <button class="theme-btn p-2.5 rounded-xl border text-xs font-bold text-left flex items-center space-x-2 bg-white border-slate-200 hover:border-slate-300" data-theme="royal">
+                  <span class="w-4 h-4 rounded-full bg-gradient-to-r from-indigo-700 to-purple-800"></span>
+                  <span>Royal Velvet</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Typography Style Picker -->
+            <div>
+              <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5">
+                Typography Font Family
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button class="font-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-purple-500 ring-2 ring-purple-500/20 text-purple-700 font-sans" data-font="sans">
+                  Modern Sans
+                </button>
+                <button class="font-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-slate-200 text-slate-600 hover:border-slate-300 font-serif" data-font="serif">
+                  Editorial Serif
+                </button>
+                <button class="font-btn py-1.5 px-2 rounded-xl border text-xs font-bold text-center bg-white border-slate-200 text-slate-600 hover:border-slate-300 font-mono" data-font="mono">
+                  Tech Mono
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Content 3: Badges & Bio -->
+          <div id="canvaPanelBadges" class="hidden space-y-3">
+            <div class="space-y-2.5">
+              <label class="flex items-center space-x-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                <input type="checkbox" id="imgShowBadge" checked class="rounded text-purple-600 focus:ring-purple-500">
+                <span>Show "🎙️ Dictated via Wispr Flow" Badge</span>
+              </label>
+              <label class="flex items-center space-x-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                <input type="checkbox" id="imgShowAuthor" checked class="rounded text-purple-600 focus:ring-purple-500">
+                <span>Show Author Profile & Avatar</span>
+              </label>
+              <label class="flex items-center space-x-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                <input type="checkbox" id="imgShowQuotes" checked class="rounded text-purple-600 focus:ring-purple-500">
+                <span>Show Decorative Quotation Marks (“ ”)</span>
+              </label>
+              <label class="flex items-center space-x-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                <input type="checkbox" id="imgShowRating" class="rounded text-purple-600 focus:ring-purple-500">
+                <span>Show 5-Star Social Proof Badge (★★★★★)</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Live Visual Canvas (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col items-center justify-center space-y-3">
+          <div class="w-full max-w-md bg-white rounded-3xl p-3 shadow-2xl border border-slate-200 flex items-center justify-center overflow-hidden">
+            <canvas id="exportCanvas" width="1080" height="1080" class="hidden"></canvas>
+            
+            <!-- Live CSS/DOM Canvas Preview -->
+            <div id="cardPreview" class="w-full aspect-square rounded-2xl p-7 flex flex-col justify-between transition-all duration-300 relative overflow-hidden bg-white text-slate-900 border border-slate-200">
+              
+              <!-- Giant Quote mark in background -->
+              <span id="previewQuoteMark" class="absolute -top-6 -left-3 text-9xl font-serif text-slate-200/50 select-none pointer-events-none">“</span>
+
+              <!-- Top Header -->
+              <div class="flex items-center justify-between relative z-10">
+                <span id="previewTag" class="text-[11px] font-bold font-mono px-3 py-1 rounded-full uppercase tracking-wider bg-purple-100 text-purple-800 border border-purple-200">
+                  Slide 1/6 • Cover Hook
+                </span>
+                <span id="previewBadge" class="text-[11px] font-bold text-slate-600 bg-white/95 border border-slate-200/90 px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Wispr Flow Verified</span>
+                </span>
+              </div>
+
+              <!-- Middle Content -->
+              <div class="space-y-3 my-auto py-4 relative z-10">
+                <div id="previewStars" class="hidden text-amber-400 text-sm tracking-widest">
+                  ★★★★★
+                </div>
+                <h3 id="previewHeadline" class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                  The Death of AI Slop: Why Brand Memory is the Moat
+                </h3>
+                <p id="previewBody" class="text-sm text-slate-600 leading-relaxed font-medium">
+                  99% of AI posts sound like robotic encyclopedia entries. Here is the 60-second voice framework we used instead.
+                </p>
+              </div>
+
+              <!-- Bottom Author Box -->
+              <div id="previewAuthorBox" class="pt-4 border-t border-slate-200/80 flex items-center justify-between relative z-10">
+                <div class="flex items-center space-x-3">
+                  <img id="previewAvatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80" class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm">
+                  <div>
+                    <p id="previewAuthorName" class="text-xs font-bold text-slate-900">Alex Rivera</p>
+                    <p id="previewAuthorRole" class="text-[10px] text-slate-500">Wispr Flow AI Builder</p>
+                  </div>
+                </div>
+                <div class="text-[11px] font-extrabold text-brand-600 font-mono tracking-wider">
+                  EchoBrand Studio
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <p id="aspectRatioLabel" class="text-[11px] text-slate-500 text-center font-medium">
+            Square 1:1 Aspect Ratio (1080x1080) • Exportable as High-Res PNG
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 6: SLOP RADAR & QUALITY METRICS       -->
+  <!-- ============================================== -->
+  <section id="section-radar" class="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-lux-card p-6 sm:p-8 space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 shadow-sm">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-lg font-extrabold text-slate-900">Section 6: Brand Drift & Slop Radar</h2>
+              <span class="text-[10px] font-bold font-mono bg-teal-50 text-teal-700 px-2.5 py-0.5 rounded-full border border-teal-200">
+                100% Slop Free
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Live heuristic score evaluating tone alignment and cliché eradication.</p>
+          </div>
+        </div>
+
+        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl">
+          Zero Clichés Detected
+        </span>
+      </div>
+
+      <!-- 4 Stat Metric Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-gradient-to-br from-brand-50 to-white p-5 rounded-2xl border border-brand-200/80 shadow-sm text-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Voice DNA Match</p>
+          <p id="metricVoiceMatch" class="text-3xl font-extrabold font-mono text-brand-600 mt-1">98%</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Cadence & Tone aligned</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-50 to-white p-5 rounded-2xl border border-emerald-200/80 shadow-sm text-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">AI Clichés Found</p>
+          <p id="metricSlop" class="text-3xl font-extrabold font-mono text-emerald-600 mt-1">0</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">All banned words filtered</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-2xl border border-purple-200/80 shadow-sm text-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hook Score</p>
+          <p id="metricHook" class="text-3xl font-extrabold font-mono text-purple-600 mt-1">96/100</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">High curiosity & friction</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-amber-50 to-white p-5 rounded-2xl border border-amber-200/80 shadow-sm text-center">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Wispr Velocity</p>
+          <p id="metricTime" class="text-3xl font-extrabold font-mono text-amber-600 mt-1">42m</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Time saved vs keyboard</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AI Status & Info Modal -->
+  <div id="aiModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">AI Engine Status</h3>
+            <p class="text-[11px] text-emerald-600 font-bold">Active & Online</p>
+          </div>
+        </div>
+        <button id="closeAiModalBtn" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 space-y-1.5">
+        <p class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Brand Memory AI Engine is Running
+        </p>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          The built-in AI engine is fully functional out-of-the-box. It dynamically enforces your Tone DNA sliders, fixes grammar, and structures 4-channel assets with zero latency.
+        </p>
+      </div>
+
+      <div class="space-y-2 pt-2 border-t border-slate-100">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-bold text-slate-700">Optional: Custom Google Gemini API Key</label>
+          <span class="text-[10px] text-slate-400 font-medium">(Not required)</span>
+        </div>
+        <input type="password" id="geminiApiKeyInput" placeholder="Optional: AIzaSy..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <p class="text-[10px] text-slate-500">If you have a Gemini API key you can paste it here, or leave empty to use the built-in AI engine.</p>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button id="clearApiKeyBtn" class="text-xs text-rose-600 hover:text-rose-700 font-bold">
+          Reset to Built-in AI
+        </button>
+        <button id="saveApiKeyBtn" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-sm">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submission Kit Modal -->
+  <div id="kitModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200">
+            <i data-lucide="award" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900">Product Space Hackathon — Submission Kit</h3>
+            <p class="text-xs text-slate-500">All materials ready to score 100/100 and submit before 11:59 PM IST.</p>
+          </div>
+        </div>
+        <button id="closeKitBtn" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex border-b border-slate-200 bg-slate-50/70 px-6 pt-3 space-x-4 overflow-x-auto">
+        <button id="modalTabPrd" class="modal-tab-btn pb-3 text-xs font-bold border-b-2 border-brand-600 text-brand-600 flex-shrink-0">
+          1. Problem & PRD (15%)
+        </button>
+        <button id="modalTabVoice" class="modal-tab-btn pb-3 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex-shrink-0">
+          2. Wispr Flow Scoring (20%)
+        </button>
+        <button id="modalTabLinkedin" class="modal-tab-btn pb-3 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex-shrink-0">
+          3. LinkedIn Submission Post (15% + 10 Bonus)
+        </button>
+        <button id="modalTabDemo" class="modal-tab-btn pb-3 text-xs font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex-shrink-0">
+          4. 2-Min Demo Video Script
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed font-sans" id="modalBody">
+      </div>
+
+      <div class="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/80 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Submission deadline: <strong class="text-slate-800 font-bold">Tonight, 31 Oct at 11:59 PM IST</strong></span>
+        <button id="copyModalContentBtn" class="flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-sm active:scale-95">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>Copy Tab Content</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-2.5 text-xs opacity-0 transition-opacity pointer-events-none">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg" class="font-semibold">Copied to clipboard!</span>
+  </div>
+
+  <!-- Main Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

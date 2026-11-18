@@ -1,0 +1,20 @@
+{
+  "name": "echobrand-studio",
+  "version": "1.0.0",
+  "description": "EchoBrand Studio — Voice & Brand Memory Content Repurposer for Wispr Flow & Product Space Hackathon",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "wispr-flow",
+    "voice-ai",
+    "brand-memory",
+    "content-repurposing",
+    "hackathon",
+    "product-space"
+  ],
+  "author": "Hackathon Builder",
+  "license": "MIT"
+}
